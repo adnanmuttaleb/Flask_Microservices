@@ -1,3 +1,6 @@
+### Secret Settings ###
+secret_settings.py
+
 ### Flask ###
 instance/*
 !instance/.gitignore
