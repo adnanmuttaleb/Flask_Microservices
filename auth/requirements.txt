@@ -5,4 +5,5 @@ flask-restful
 flask-marshmallow
 marshmallow-sqlalchemy
 flask-jwt-extended
+passlib
 pika
