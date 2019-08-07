@@ -1,0 +1,10 @@
+Flask
+Flask-Migrate
+flask-restful
+flask-marshmallow
+marshmallow-sqlalchemy
+flask-jwt-extended
+pika
+pymongo
+mongoengine
+mongoengine_goodjson
