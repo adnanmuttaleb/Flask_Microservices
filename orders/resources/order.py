@@ -18,7 +18,7 @@ class OrderResource(Resource):
             try:
                 order_date = parse(order_date)
             except:
-                return {'message': 'date time is not correct'}, 200
+                return {'message': 'date time is not correct'}, 400
 
         orders = OrderModel.find_order_by(user_id, product_id, order_date)
         return {
