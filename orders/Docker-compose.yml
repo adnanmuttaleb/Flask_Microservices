@@ -17,6 +17,5 @@ services:
     environment:
       - SECRET_KEY=SuperSecretKey
       - FLASK_APP=run.py
-      - DATABASE_URL=postgres://postgres:root@localhost:5432/orders_micro
     depends_on:
       - db
