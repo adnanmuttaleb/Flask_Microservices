@@ -1,0 +1,22 @@
+version: "3"
+services:
+  db:
+    image: postgres
+  environment:
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=root
+    - POSTGRES_DB=orders_micro
+
+  web:
+    build: .
+    command: bash -c "flask db migrate && flask run"
+    volumes:
+      - .:/order
+    ports:
+      - "5000:5000"
+    environment:
+      - SECRET_KEY=SuperSecretKey
+      - FLASK_APP=run.py
+      - DATABASE_URL=postgres://postgres:root@localhost:5432/orders_micro
+    depends_on:
+      - db
