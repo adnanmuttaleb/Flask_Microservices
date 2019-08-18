@@ -79,6 +79,7 @@ services:
       - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:orders.docker.localhost,traefik.backend=orders,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
     depends_on:
       - order_db
+      - rabbitmq
 
   order_db:
     image: postgres
