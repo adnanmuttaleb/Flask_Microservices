@@ -1,12 +1,10 @@
-import os
-
 from flask import Flask
 from flask_restful import Api
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 
-from db import db
-from resources.order import OrderResource
+from .db import db
+from .resources.order import OrderResource
 
 app = Flask(__name__)
 api = Api(app)

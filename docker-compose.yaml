@@ -37,7 +37,7 @@ services:
   inventory_db:
     image: mongo
     ports:
-    - "27017:27017"
+      - "27017:27017"
 
   inventory:
     build:
@@ -49,7 +49,7 @@ services:
     depends_on:
       - rabbitmq
       - inventory_db
-      
+
   users:
     build:
       context: ./users
@@ -68,7 +68,7 @@ services:
     environment:
       - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:auth.docker.localhost,traefik.backend=auth,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
     depends_on:
-      - rabbitmq  
+      - rabbitmq
 
   orders:
     build:
@@ -76,11 +76,11 @@ services:
     expose:
       - "5000"
     environment:
-      - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:auth.docker.localhost,traefik.backend=orders,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
+      - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:orders.docker.localhost,traefik.backend=orders,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
     depends_on:
-      - orders_db
+      - order_db
 
-  orders_db:
+  order_db:
     image: postgres
     environment:
       - POSTGRES_USER=postgres

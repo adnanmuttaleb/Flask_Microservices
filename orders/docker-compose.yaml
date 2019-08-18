@@ -1,21 +1,20 @@
 version: "3"
 services:
-  db:
+  order_db:
     image: postgres
-  environment:
-    - POSTGRES_USER=postgres
-    - POSTGRES_PASSWORD=root
-    - POSTGRES_DB=orders_micro
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=orders_micro
+    ports:
+      - 5432:5432
 
   web:
     build: .
-    command: bash -c "flask db migrate && flask run"
+    command: bash -c "flask db init && flask db migrate && flask db upgrade && flask run"
     volumes:
-      - .:/order
+      - .:/orders
     ports:
       - "5000:5000"
-    environment:
-      - SECRET_KEY=SuperSecretKey
-      - FLASK_APP=run.py
     depends_on:
-      - db
+      - order_db

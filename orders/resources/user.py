@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 
-from models.user import UserModel
+from .models.user import UserModel
 
 
 class UserResource(Resource):

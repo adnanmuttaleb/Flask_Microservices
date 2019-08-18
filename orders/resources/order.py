@@ -1,9 +1,9 @@
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse
 
-from models.user import UserModel
-from models.product import ProductModel
-from models.order import OrderModel
+from ..models.user import UserModel
+from ..models.product import ProductModel
+from ..models.order import OrderModel
 
 from dateutil.parser import parse
 
