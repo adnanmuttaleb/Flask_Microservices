@@ -6,3 +6,4 @@ flask-marshmallow
 marshmallow-sqlalchemy
 flask-jwt-extended
 pika
+passlib

@@ -22,6 +22,6 @@ def create_app(test_config=None):
     api.add_resource(ProductDetails, '/products/<product_id>')
 
     api.init_app(app)
-    
+
     return app
 

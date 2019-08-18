@@ -1,0 +1,53 @@
+version: "3.7"
+services:
+
+  consul:
+    image: consul
+    command: consul agent -server -dev -client=0.0.0.0 -ui -bootstrap -log-level warn
+    ports:
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
+
+  registrator:
+    image: gliderlabs/registrator:latest
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    depends_on:
+      - consul
+    command: -internal consul://consul:8500
+  
+  reverse-proxy:
+    image: traefik
+    command: --api --consulcatalog.endpoint=consul:8500
+    ports:
+      - 8080:8080
+      - 80:80
+    volumes:
+      - ./traefik.toml:/etc/traefik/traefik.toml
+    depends_on:
+      - registrator  
+
+  inventory:
+    build:
+      context: ./inventory
+    expose:
+      - "5000"
+    environment:
+      - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:inventory.docker.localhost,traefik.backend=inventory,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
+  
+  users:
+    build:
+      context: ./users
+    expose:
+      - "5000"
+    environment:
+      - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:users.docker.localhost,traefik.backend=users,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
+
+  auth:
+    build:
+      context: ./auth
+    expose:
+      - "5000"
+    environment:
+      - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:auth.docker.localhost,traefik.backend=auth,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
