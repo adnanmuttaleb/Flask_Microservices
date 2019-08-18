@@ -16,7 +16,7 @@ services:
     depends_on:
       - consul
     command: -internal consul://consul:8500
-  
+
   reverse-proxy:
     image: traefik
     command: --api --consulcatalog.endpoint=consul:8500
@@ -26,7 +26,7 @@ services:
     volumes:
       - ./traefik.toml:/etc/traefik/traefik.toml
     depends_on:
-      - registrator  
+      - registrator
 
   inventory:
     build:
@@ -35,7 +35,7 @@ services:
       - "5000"
     environment:
       - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:inventory.docker.localhost,traefik.backend=inventory,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
-  
+
   users:
     build:
       context: ./users
@@ -51,3 +51,20 @@ services:
       - "5000"
     environment:
       - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:auth.docker.localhost,traefik.backend=auth,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
+
+  orders:
+    build:
+      context: ./orders
+    expose:
+      - "5000"
+    environment:
+      - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:auth.docker.localhost,traefik.backend=orders,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
+    depends_on:
+      - orders_db
+
+  orders_db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=orders_micro
