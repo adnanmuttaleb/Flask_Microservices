@@ -1,3 +1,7 @@
+import os
+
+SECRET_KEY = os.environ['SECRET_KEY']
+JWT_SECRET_KEY = os.environ['JWT_SECRET_KEY']
 PROPAGATE_EXCEPTIONS = True
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_DATABASE_URI = 'postgres://postgres:root@localhost:5432/orders_micro'
+SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']

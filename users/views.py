@@ -26,7 +26,6 @@ class UserList(Resource):
         self.parser.add_argument('username', type=str, nullable=False)
         self.parser.add_argument('password', type=str, nullable=False)
 
-    
     @jwt_required
     def get(self):
         users = User.query.all()

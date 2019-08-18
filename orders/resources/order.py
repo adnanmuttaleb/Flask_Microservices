@@ -1,3 +1,4 @@
+from flask_jwt_extended import jwt_required
 from flask_restful import Resource, reqparse
 
 from models.user import UserModel
@@ -6,8 +7,9 @@ from models.order import OrderModel
 
 from dateutil.parser import parse
 
-class OrderResource(Resource):
 
+class OrderResource(Resource):
+    @jwt_required
     def get(self):
         data = self.__get_order_query_string()
         user_id = data['user_id']
@@ -33,6 +35,7 @@ class OrderResource(Resource):
             ],
         }
 
+    @jwt_required
     def post(self):
         data = self.__post_order_parser()
 
