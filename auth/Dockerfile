@@ -16,6 +16,12 @@ ENV FLASK_RUN_HOST '0.0.0.0'
 
 RUN pip install -r requirements.txt
 
+RUN flask db init
+
+RUN flask db migrate
+
+RUN flask db upgrade
+
 EXPOSE "5000"
 
 CMD [ "flask", "run" ]

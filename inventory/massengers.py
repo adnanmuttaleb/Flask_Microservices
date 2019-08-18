@@ -6,7 +6,7 @@ class PikaMassenger():
     exchange_name = 'inventory_events'
 
     def __init__(self, *args, **kwargs):
-        self.conn = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        self.conn = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
         self.channel = self.conn.channel()
         self.channel.exchange_declare(
             exchange=self.exchange_name, 

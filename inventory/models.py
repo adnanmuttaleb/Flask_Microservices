@@ -4,7 +4,7 @@ from mongoengine import *
 from mongoengine.base import BaseDocument
 import mongoengine_goodjson as gj
 
-connect("inventory", host='localhost', port=27017)
+connect("inventory", host='inventory_db', port=27017)
 
 class Category(gj.EmbeddedDocument):
     name = StringField(required=True, max_length=200)

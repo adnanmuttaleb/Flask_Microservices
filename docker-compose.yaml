@@ -28,6 +28,17 @@ services:
     depends_on:
       - registrator  
 
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+
+  inventory_db:
+    image: mongo
+    ports:
+    - "27017:27017"
+
   inventory:
     build:
       context: ./inventory
@@ -35,7 +46,10 @@ services:
       - "5000"
     environment:
       - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:inventory.docker.localhost,traefik.backend=inventory,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
-  
+    depends_on:
+      - rabbitmq
+      - inventory_db
+      
   users:
     build:
       context: ./users
@@ -43,6 +57,8 @@ services:
       - "5000"
     environment:
       - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:users.docker.localhost,traefik.backend=users,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
+    depends_on:
+      - rabbitmq
 
   auth:
     build:
@@ -51,3 +67,5 @@ services:
       - "5000"
     environment:
       - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:auth.docker.localhost,traefik.backend=auth,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
+    depends_on:
+      - rabbitmq  
