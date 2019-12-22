@@ -29,7 +29,7 @@ class UserList(Resource):
     @jwt_required
     def get(self):
         users = User.query.all()
-        return jsonify(user_schema.dump(users, many=True).data)
+        return jsonify(user_schema.dump(users, many=True))
 
     def post(self):
         args = self.parser.parse_args()
@@ -43,11 +43,12 @@ class UserList(Resource):
 
        
         with self.massenger_class() as mass:
+            print('Sending Massege of type user.created')
             mass.send(
-                massege=json.dumps(user_schema.dump(user).data), 
+                massege=json.dumps(user_schema.dump(user)), 
                 keys='user.created')
         
-        return jsonify(user_schema.dump(user).data)
+        return jsonify(user_schema.dump(user))
 
 
 class UserDetails(Resource):
@@ -63,7 +64,7 @@ class UserDetails(Resource):
     @jwt_required
     def get(self, user_id):
         user = User.query.filter_by(id=user_id).first_or_404()
-        return jsonify(user_schema.dump(user).data)
+        return jsonify(user_schema.dump(user))
 
     @jwt_required
     def put(self, user_id):
@@ -78,10 +79,10 @@ class UserDetails(Resource):
 
         with self.massenger_class() as mass:
             mass.send(
-                massege=json.dumps(user_schema.dump(user).data), 
+                massege=json.dumps(user_schema.dump(user)), 
                 keys='user.updated')
         
-        return jsonify(user_schema.dump(user).data)
+        return jsonify(user_schema.dump(user))
     
     @jwt_required
     def delete(self, user_id):
@@ -91,7 +92,7 @@ class UserDetails(Resource):
 
         with self.massenger_class() as mass:
             mass.send(
-                massege=json.dumps(user_schema.dump(user).data), 
+                massege=json.dumps(user_schema.dump(user)), 
                 keys='user.deleted')
         
         return "", 204

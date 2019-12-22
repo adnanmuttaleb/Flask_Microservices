@@ -1,6 +1,5 @@
 from flask import current_app, jsonify
 from flask_restful import Resource, reqparse
-from flask_marshmallow import Marshmallow
 from flask_jwt_extended import (
     create_access_token, create_refresh_token, 
     jwt_required, jwt_refresh_token_required, 

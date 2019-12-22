@@ -1,12 +1,14 @@
 from auth import create_app
 from .massenger import PikaMassenger
-import threading
+from multiprocessing import Pool
 from .models import User
 
 
 def start_consumer(app):
+  
     def callback(ch, method, properties, body):
         try:
+            print("Event recieved %r" % body)
             with app.app_context():
 
                 if method.routing_key == 'user.created':
@@ -16,7 +18,7 @@ def start_consumer(app):
                 elif method.routing_key == 'user.deleted':
                     User.delete_from_json(body)
                 print(" [x] %r:%r consumed" % (method.routing_key, body))
-
+                
         except Exception as e:
             print("Consuming event %s failed: %s" % (method.routing_key, str(e)))
 
@@ -25,8 +27,9 @@ def start_consumer(app):
 
 
 app = create_app()
-consumer_thread = threading.Thread(target=start_consumer, kwargs={"app": app})
-consumer_thread.start()
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="8000")
+pool = Pool(processes=1)
+result = pool.apply_async(start_consumer, [app])
+
+# consumer_thread = threading.Thread(target=start_consumer, kwargs={"app": app})
+# consumer_thread.start()

@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+
+  inventory_db:
+    image: mongo
+    volumes:
+      - inventory_data:/data/db
+    ports:
+      - "27017:27017"
+  
+  inventory:
+    build:
+      context: ./inventory
+    expose:
+      - "5000"
+    environment:
+      - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:inventory.docker.localhost,traefik.backend=inventory,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - rabbitmq
+      - inventory_db
+     
+
+volumes:
+  inventory_data:

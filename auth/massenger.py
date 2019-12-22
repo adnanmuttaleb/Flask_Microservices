@@ -1,17 +1,18 @@
 import pika
 
-
 class PikaMassenger():
 
     exchange_name = 'users_events'
 
     def __init__(self, *args, **kwargs):
+        
         self.conn = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
         self.channel = self.conn.channel()
         self.channel.exchange_declare(
             exchange=self.exchange_name, 
             exchange_type='topic')
-
+        print('Successfully connected to AMPQ')
+    
     def consume(self, keys, callback):
         print('started consuming')
         result = self.channel.queue_declare('', exclusive=True)
@@ -36,3 +37,4 @@ class PikaMassenger():
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.conn.close()
+

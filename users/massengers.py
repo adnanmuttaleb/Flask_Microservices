@@ -6,11 +6,15 @@ class PikaMassenger():
     exchange_name = 'users_events'
 
     def __init__(self, *args, **kwargs):
-        self.conn = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
-        self.channel = self.conn.channel()
-        self.channel.exchange_declare(
-            exchange=self.exchange_name, 
-            exchange_type='topic')
+        try:
+            self.conn = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+            self.channel = self.conn.channel()
+            self.channel.exchange_declare(
+                exchange=self.exchange_name, 
+                exchange_type='topic')
+            print('Successfully connected TO AMPQ')
+        except:
+            print('Error While connecting TO AMPQ')
     
     def send(self, massege, keys):
         self.channel.basic_publish(

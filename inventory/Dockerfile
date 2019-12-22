@@ -1,6 +1,10 @@
 FROM  python:3.6
 
+COPY requirements.txt /inventory/requirements.txt
+
 WORKDIR /inventory
+
+RUN pip install -r requirements.txt
 
 COPY . /inventory
 
@@ -14,10 +18,6 @@ ENV FLASK_RUN_PORT 5000
 
 ENV FLASK_RUN_HOST '0.0.0.0'
 
-RUN pip install -r requirements.txt
-
 EXPOSE "5000"
 
-CMD [ "flask", "run" ]
-
-
+CMD [ "flask", "run"]

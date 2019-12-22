@@ -1,5 +1,5 @@
 
-SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/auth.db'
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:123456@auth_db:5432/postgres'
 JWT_BLACKLIST_ENABLED = True
 JWT_BLACKLIST_TOKEN_CHECKS = ['access']
 
