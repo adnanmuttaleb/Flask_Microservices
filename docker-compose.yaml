@@ -33,13 +33,11 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
-<<<<<<< HEAD
     healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "5672" ]
       interval: 5s
       timeout: 15s
       retries: 1
-=======
 
   inventory_db:
     image: mongo
@@ -76,7 +74,6 @@ services:
       - SERVICE_TAGS=traefik.enable=true,traefik.frontend.entryPoints=http,traefik.frontend.rule=Host:auth.docker.localhost,traefik.backend=auth,traefik.backend.circuitbreaker.expression=NetworkErrorRatio()>0.5
     depends_on:
       - rabbitmq
->>>>>>> da4e206cf1e19fc83243222b93e23221420a5729
 
   orders:
     build:
